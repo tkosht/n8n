@@ -1,0 +1,63 @@
+services:
+  # n8n本体のサービス定義
+  n8n:
+    image: n8nio/n8n:latest 
+    restart: unless-stopped
+    environment:
+      # --- データベース関連の設定 ---
+      # .envファイルから読み込む
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=db # サービス名'db'をホストとして指定
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB}
+      - DB_POSTGRESDB_USER=${POSTGRES_USER}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
+
+      # --- n8nの基本設定 ---
+      # .envファイルから読み込む
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+
+      # for via local network
+      - N8N_SECURE_COOKIE=false
+
+      # --- 拡張性のための設定（任意）---
+      # WebhookのテストURL。ローカル環境では空欄でOK
+      # 本番環境やngrok等を使う場合は設定 -> WEBHOOK_URL=https://your-domain.com/
+      - NODE_ENV=production
+      - N8N_PROTOCOL=http
+      - N8N_HOST=192.168.1.11
+      - N8N_PORT=5678
+      - WEBHOOK_URL=http://192.168.1.11:5678
+    volumes:
+      # n8nの設定ファイルやSQLiteデータベース（この構成では未使用）を永続化
+      - n8n_data:/home/node/.n8n
+    ports:
+      # ホストの5678ポートをコンテナの5678ポートにマッピング
+      - "5678:5678"
+    dns:
+      - 8.8.8.8    # Google Public DNS
+      - 1.1.1.1    # Cloudflare DNS
+    depends_on:
+      # dbサービスが起動してからn8nを起動する
+      - db
+
+  # PostgreSQLデータベースのサービス定義
+  db:
+    image: postgres:16  # 任意のバージョンを指定可能
+    restart: unless-stopped
+    environment:
+      # .envファイルから読み込む
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - TZ=${TZ}
+    volumes:
+      # データベースのデータを永続化
+      - postgres_data:/var/lib/postgresql/data
+
+# Dockerにデータ永続化のためのボリュームを作成させる
+volumes:
+  n8n_data:
+  postgres_data:
+
