@@ -24,17 +24,25 @@ services:
       # --- 拡張性のための設定（任意）---
       # WebhookのテストURL。ローカル環境では空欄でOK
       # 本番環境やngrok等を使う場合は設定 -> WEBHOOK_URL=https://your-domain.com/
-      - NODE_ENV=production
-      - N8N_PROTOCOL=http
       - N8N_HOST=192.168.1.11
-      - N8N_PORT=5678
-      - WEBHOOK_URL=http://192.168.1.11:5678
+      # - N8N_PROTOCOL=http
+      # - N8N_PORT=5678
+      # - WEBHOOK_URL=http://192.168.1.11:5678
+      - N8N_PROTOCOL=https
+      - N8N_PORT=443
+      - N8N_SSL_CERT=/certs/cert.pem
+      - N8N_SSL_KEY=/certs/key.pem
+      - NODE_ENV=production
+      - WEBHOOK_URL=https://192.168.1.11:8443
     volumes:
       # n8nの設定ファイルやSQLiteデータベース（この構成では未使用）を永続化
+      # - ./data/n8n/.n8n:/home/node/.n8n
       - n8n_data:/home/node/.n8n
+      - ./.certs:/certs:ro
     ports:
       # ホストの5678ポートをコンテナの5678ポートにマッピング
-      - "5678:5678"
+      # - "5678:5678"
+      - "8443:443"
     dns:
       - 8.8.8.8    # Google Public DNS
       - 1.1.1.1    # Cloudflare DNS
