@@ -11,7 +11,7 @@ cp .env.example .env
 ## run bin/certs.sh
 
 ```bash
-sh bin/cert.sh
+make cert
 ```
 
 ## edit .env

@@ -30,8 +30,8 @@ services:
       # - WEBHOOK_URL=http://${N8N_HOST}:5678
       - N8N_PROTOCOL=https
       - N8N_PORT=443
-      - N8N_SSL_CERT=/certs/cert.pem
-      - N8N_SSL_KEY=/certs/key.pem
+      - N8N_SSL_CERT=/certs/server.crt
+      - N8N_SSL_KEY=/certs/server.key
       - NODE_ENV=production
       - WEBHOOK_URL=https://${N8N_HOST}:8443
     volumes:

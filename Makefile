@@ -12,6 +12,8 @@ reup: down up
 sh:
 	docker compose exec n8n /bin/sh
 
+cert:
+	sh bin/cert.sh
 
 # ==========
 # docker compose aliases
