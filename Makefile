@@ -13,7 +13,7 @@ sh:
 	docker compose exec n8n /bin/sh
 
 cert:
-	sh bin/cert.sh
+	@sh bin/cert.sh
 
 # ==========
 # docker compose aliases
