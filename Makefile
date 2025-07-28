@@ -36,3 +36,6 @@ clean: clean-containers
 clean-containers:
 	docker compose down --rmi all
 
+clean-cert:
+	rm -rf .certs
+

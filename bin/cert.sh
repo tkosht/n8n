@@ -3,6 +3,8 @@
 d=$(cd $(dirname $0) && pwd)
 cd $d/../
 
+. ./.env
+
 mkdir -p .certs/
 cd .certs/
 
