@@ -1,7 +1,7 @@
 services:
   # n8n本体のサービス定義
   n8n:
-    image: n8nio/n8n:latest 
+    image: docker.n8n.io/n8nio/n8n
     restart: unless-stopped
     environment:
       # --- データベース関連の設定 ---
